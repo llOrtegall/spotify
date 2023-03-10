@@ -9,11 +9,11 @@ import * as dataRaw from '../../../data/tracks.json';
 })
 export class PlayListBodyComponent implements OnInit {
 
-  tracks: Array<TrackModel> = []
+  tracks: TrackModel[] = []
 
   constructor() { }
   ngOnInit(): void {
-    const {data}:any = (dataRaw as any).default
+    const { data }: any = (dataRaw as any).default
     this.tracks = data;
   }
 }

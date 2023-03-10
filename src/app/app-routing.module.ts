@@ -5,14 +5,11 @@ import { HomePageComponent } from '@modules/home/pages/home-page/home-page.compo
 const routes: Routes = [
 
   {
-    path: 'auth', //TODO: Razi principal
-    loadChildren: () => import(`./modules/auth/auth.module`).then(m => m.AuthModule)
-  },
-  {
     path: '',
     component: HomePageComponent, //TODO: Razi principal
     loadChildren: () => import(`./modules/home/home.module`).then(m => m.HomeModule)
   },
+
 ];
 
 @NgModule({

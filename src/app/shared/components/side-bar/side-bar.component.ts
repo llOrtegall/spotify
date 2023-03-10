@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   templateUrl: './side-bar.component.html',
   styleUrls: ['./side-bar.component.css']
 })
-export class SideBarComponent implements OnInit{
+export class SideBarComponent implements OnInit {
 
   mainMenu: {
     defaultOptions: Array<any>, accessLink: Array<any>
@@ -14,11 +14,12 @@ export class SideBarComponent implements OnInit{
 
   customOptions: Array<any> = []
 
-  constructor (){
+  constructor() {
 
   }
 
   ngOnInit(): void {
+
     this.mainMenu.defaultOptions = [
       {
         name: 'Home',
@@ -37,7 +38,6 @@ export class SideBarComponent implements OnInit{
         query: { hola: 'mundo' }
       }
     ]
-
     this.mainMenu.accessLink = [
       {
         name: 'Crear lista',
@@ -48,7 +48,6 @@ export class SideBarComponent implements OnInit{
         icon: 'uil-heart-medical'
       }
     ]
-
     this.customOptions = [
       {
         name: 'Mi lista º1',

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TrackModel } from '@core/models/tracks.model';
-import * as dataRaw from '../../../../data/tracks.json'
+import { TrackService } from '@modules/tracks/services/track.service';
+import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-tracks-pages',
@@ -9,14 +11,31 @@ import * as dataRaw from '../../../../data/tracks.json'
 })
 export class TracksPagesComponent implements OnInit {
 
-  mockTranksList:Array<TrackModel> = [
+  tracksTrending: Array<TrackModel> = []
+  tracksRamdom: Array<TrackModel> = []
 
-  ]
+  listObservers$: Array<Subscription> = []
 
-  constructor() { }
+  constructor(private trackService: TrackService) { }
 
   ngOnInit(): void {
-    const {data}:any = (dataRaw as any).default
-    this.mockTranksList = data;
+    const observer1$ = this.trackService.dataTracksTrending$
+      .subscribe(response => {
+        this.tracksTrending = response
+        this.tracksRamdom = response
+        console.log('Canciones Tranding -------------> ', response);
+      })
+
+    const observer2$ = this.trackService.datatracksRamdom$
+      .subscribe(response => {
+        this.tracksRamdom = [... this.tracksRamdom, ...response]
+        console.log('Canciones Ramdomn Entrando -------------> ', response);
+      })
+
+    this.listObservers$ = [observer1$, observer2$]
+  }
+
+  ngOnDrestroy(): void {
+    this.listObservers$.forEach(u => u.unsubscribe())
   }
 }

@@ -1,15 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TrackModel } from '@core/models/tracks.model';
 import { TrackService } from '@modules/tracks/services/track.service';
-import { TracksModule } from '@modules/tracks/tracks.module';
 import { Subscription } from 'rxjs';
-
 
 @Component({
   selector: 'app-tracks-pages',
   templateUrl: './tracks-pages.component.html',
   styleUrls: ['./tracks-pages.component.css']
 })
+
 export class TracksPagesComponent implements OnInit, OnDestroy {
 
   tracksTrending: Array<TrackModel> = []
@@ -21,19 +20,27 @@ export class TracksPagesComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.trackService.getAllTracks$()
-      .subscribe((response: TrackModel[]) => {
-        this.tracksTrending = response
-      })
+    this.loadDataAll()
+    this.loadDataRamdom()
+  }
 
-      this.trackService.getAllRamdom$()
+  async loadDataAll(): Promise<any> {
+    this.tracksTrending = await this.trackService.getAllTracks$().toPromise()
+    this.tracksRamdom = await this.trackService.getAllRamdom$().toPromise()
+    // .then(res => {})
+    // .catch(err => {
+    //   console.log('Error de Conexción')
+    // })
+
+    // console.log('-promesa cruda--->', dataRaw)
+  }
+
+  loadDataRamdom(): void {
+    this.trackService.getAllRamdom$()
       .subscribe((response: TrackModel[]) => {
         this.tracksRamdom = response
       })
-
   }
-  
-
 
   ngOnDestroy(): void {
 

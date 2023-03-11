@@ -1,35 +1,40 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TrackModel } from '@core/models/tracks.model';
-import { observable, Observable, of } from 'rxjs';
-import * as dataRaw from '../../../data/tracks.json';
+import { map, mergeMap, Observable, tap } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TrackService {
 
-  public dataTracksTrending$: Observable<TrackModel[]> = of([])
-  public datatracksRamdom$: Observable<any> = of([])
+  private readonly URL = environment.api
+  constructor(private http: HttpClient) {
 
-  constructor() {
-    const { data }: any = (dataRaw as any).default;
+  }
 
-    this.dataTracksTrending$ = of(data) // esta data pasa a hacer un obeeservable y debemos subcribirnos
-
-    this.datatracksRamdom$ = new Observable((observer) => {
-
-      const trackExample: TrackModel = {
-        _id: 9,
-        name: 'Leve',
-        album: ' Cartel De Santa ',
-        url: 'http://',
-        cover: 'https://akamai.sscdn.co/uploadfile/letras/fotos/f/2/8/8/f28893d1d7f27c22764f28b32375960e.jpg'
-
-      }
-
-      setTimeout(() => {
-        observer.next([trackExample])
-      }, 3500)
+  private skipById(listTracks: TrackModel[], id: number): Promise<TrackModel[]> {
+    return new Promise((resolve, reject) => {
+      const lisTmp = listTracks.filter(a => a._id !== id)
+      resolve(lisTmp)
     })
+  }
+
+  getAllTracks$(): Observable<any> {
+    return this.http.get(`${this.URL}/tracks`)
+      .pipe(
+        map(({ data }: any) => {
+          return data
+        })
+      )
+  }
+
+  getAllRamdom$(): Observable<any> {
+    return this.http.get(`${this.URL}/tracks`)
+      .pipe(
+        mergeMap(({ data }: any) => this.skipById(data, 2)),
+        tap(data => console.log('--->', data))
+      )
   }
 }

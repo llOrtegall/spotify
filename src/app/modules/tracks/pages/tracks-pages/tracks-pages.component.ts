@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TrackModel } from '@core/models/tracks.model';
 import { TrackService } from '@modules/tracks/services/track.service';
+import { TracksModule } from '@modules/tracks/tracks.module';
 import { Subscription } from 'rxjs';
 
 
@@ -9,7 +10,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './tracks-pages.component.html',
   styleUrls: ['./tracks-pages.component.css']
 })
-export class TracksPagesComponent implements OnInit {
+export class TracksPagesComponent implements OnInit, OnDestroy {
 
   tracksTrending: Array<TrackModel> = []
   tracksRamdom: Array<TrackModel> = []
@@ -18,24 +19,24 @@ export class TracksPagesComponent implements OnInit {
 
   constructor(private trackService: TrackService) { }
 
+
   ngOnInit(): void {
-    const observer1$ = this.trackService.dataTracksTrending$
-      .subscribe(response => {
+    this.trackService.getAllTracks$()
+      .subscribe((response: TrackModel[]) => {
         this.tracksTrending = response
+      })
+
+      this.trackService.getAllRamdom$()
+      .subscribe((response: TrackModel[]) => {
         this.tracksRamdom = response
-        console.log('Canciones Tranding -------------> ', response);
       })
 
-    const observer2$ = this.trackService.datatracksRamdom$
-      .subscribe(response => {
-        this.tracksRamdom = [... this.tracksRamdom, ...response]
-        console.log('Canciones Ramdomn Entrando -------------> ', response);
-      })
+  }
+  
 
-    this.listObservers$ = [observer1$, observer2$]
+
+  ngOnDestroy(): void {
+
   }
 
-  ngOnDrestroy(): void {
-    this.listObservers$.forEach(u => u.unsubscribe())
-  }
 }

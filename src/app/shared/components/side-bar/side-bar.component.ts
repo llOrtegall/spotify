@@ -1,7 +1,6 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { TrackService } from '@modules/tracks/services/track.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -16,7 +15,7 @@ export class SideBarComponent implements OnInit {
 
   customOptions: Array<any> = []
 
-  constructor(private router: Router, private trackService: TrackService) {
+  constructor(private router: Router) {
 
   }
 
@@ -27,25 +26,25 @@ export class SideBarComponent implements OnInit {
         name: 'Home',
         icon: 'uil uil-estate',
         router: ['/', 'auth'],
-        query: { hola: 'mundo' }
+
       },
       {
         name: 'Buscar',
         icon: 'uil uil-search',
         router: ['/', 'history'],
-        query: { hola: 'mundo' }
+
       },
       {
         name: 'Tu biblioteca',
         icon: 'uil uil-chart',
         router: ['/', 'favoritos'],//TODO: http://localhost:4200/
-        query: { hola: 'mundo' }
+
       },
       {
         name: 'Tus Canciones',
         icon: 'uil uil-music',
         router: ['/', 'tracks'],//TODO: http://localhost:4200/
-        query: { hola: 'mundo' }
+
       },
     ]
     this.mainMenu.accessLink = [
@@ -76,15 +75,6 @@ export class SideBarComponent implements OnInit {
         router: ['/']
       }
     ]
-
-    this.trackService.datatracksRamdom$.subscribe((response: any) => {
-      console.log('---------->', response);
-      this.customOptions.push({
-        name: response[0].name,
-        router: []
-      })
-    })
-
   }
 
 }

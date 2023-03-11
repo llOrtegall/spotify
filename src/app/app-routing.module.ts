@@ -13,7 +13,12 @@ const routes: Routes = [ //TODO: router-outlet (Padre)
     path: '',//TODO (Private) 🔴🔴
     component: HomePageComponent,
     loadChildren: () => import(`./modules/home/home.module`).then(m => m.HomeModule),
+  },
+  {
+    path: '**',//TODO 404 cuando no existe la ruta
+    redirectTo: '/tracks'
   }
+
 ];
 
 @NgModule({

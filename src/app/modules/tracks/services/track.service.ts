@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TrackModel } from '@core/models/tracks.model';
-import { catchError, map, mergeMap, Observable, of, tap } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { map, tap, mergeMap, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -21,6 +22,9 @@ export class TrackService {
         })
     }
 
+    /**
+     * En Esta Linea se esta conectando con la API 
+     */
     getAllTracks$(): Observable<any> {
         return this.http.get(`${this.URL}/tracks`)
             .pipe(
@@ -33,10 +37,14 @@ export class TrackService {
     getAllRamdom$(): Observable<any> {
         return this.http.get(`${this.URL}/tracks`)
             .pipe(
-                mergeMap(({ data }: any) => this.skipById(data, 2)),
                 tap(data => console.log('--->', data)),
+                mergeMap(({ data }: any) => this.skipById(data, 1)),
+                tap(data => console.log('--->', data)),
+
                 catchError((err) => {
-                    console.log('Algo de Paso', err)
+                    const [ status, statusText] = err;
+                    console.log('Algo Paso Revisame', [status, statusText])
+
                     return of([])
                 })
             )

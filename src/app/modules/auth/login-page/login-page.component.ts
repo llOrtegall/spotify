@@ -10,7 +10,6 @@ import { AuthService } from '../services/auth.service';
 })
 export class LoginPageComponent implements OnInit {
 
-    errorSession: boolean = false;
 
     formLogin: FormGroup = new FormGroup({});
 
@@ -34,15 +33,13 @@ export class LoginPageComponent implements OnInit {
     }
 
     sendLogin(): void {
-        const {email, password} = this.formLogin.value
-        
-        this._authService.sendCredentials(email, password).subscribe(responseOk => {
-            //cuando el ingresa correctamente retorna una peticion 200 OK
-            console.log('session iniciada correcta', responseOk)
-        },
-        err => {
-            this.errorSession = true;
-            console.log('session iniciada correcta', err)
-        })
+        const { email, password} = this.formLogin.value
+        this._authService.sendCredentials(email, password)
+        .subscribe(responseOk => {
+            console.log('ingresa credenciales correctas', responseOk)
+        }, err => {
+            console.log('Error Con Usuario y contraseña', err)
+        }
+        )
     }
 }

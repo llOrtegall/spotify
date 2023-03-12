@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { timeout } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 
@@ -11,9 +12,11 @@ import { AuthService } from '../services/auth.service';
 export class LoginPageComponent implements OnInit {
 
 
+    errorSession: boolean = false
+
     formLogin: FormGroup = new FormGroup({});
 
-    constructor(private _authService: AuthService) {  }
+    constructor(private _authService: AuthService) { }
 
     ngOnInit(): void {
         this.formLogin = new FormGroup(
@@ -32,14 +35,18 @@ export class LoginPageComponent implements OnInit {
         )
     }
 
+
     sendLogin(): void {
-        const { email, password} = this.formLogin.value
+
+        const { email, password } = this.formLogin.value
         this._authService.sendCredentials(email, password)
-        .subscribe(responseOk => {
-            console.log('ingresa credenciales correctas', responseOk)
-        }, err => {
-            console.log('Error Con Usuario y contraseña', err)
-        }
-        )
+            .subscribe(responseOk => {
+                console.log('ingresa credenciales correctas', responseOk)
+            }, err => {
+                this.errorSession = true
+                console.log('Error Con Usuario y contraseña', err)
+                
+            }
+            )
     }
 }

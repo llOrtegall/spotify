@@ -4,40 +4,32 @@ import { TrackService } from '@modules/tracks/services/track.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-tracks-pages',
-  templateUrl: './tracks-pages.component.html',
-  styleUrls: ['./tracks-pages.component.css']
+    selector: 'app-tracks-pages',
+    templateUrl: './tracks-pages.component.html',
+    styleUrls: ['./tracks-pages.component.css']
 })
 
 export class TracksPagesComponent implements OnInit, OnDestroy {
 
-  tracksTrending: Array<TrackModel> = []
-  tracksRamdom: Array<TrackModel> = []
+    tracksTrending: Array<TrackModel> = []
+    tracksRamdom: Array<TrackModel> = []
 
-  listObservers$: Array<Subscription> = []
+    listObservers$: Array<Subscription> = []
 
-  constructor(private trackService: TrackService) { }
+    constructor(private trackService: TrackService) {
+
+    }
 
 
-  ngOnInit(): void {
-    this.loadDataAll()
-    this.loadDataRamdom()
-  }
+    ngOnInit(): void {
+        this.trackService.getAllTracks$()
+            .subscribe(response => {
+                console.log('Respuesta Aquí Desde la API ')
+            })
+    }
 
-  async loadDataAll(): Promise<any> {
-    this.tracksTrending = await this.trackService.getAllTracks$().toPromise()
-    this.tracksRamdom = await this.trackService.getAllRamdom$().toPromise()
-  }
+    ngOnDestroy(): void {
 
-  loadDataRamdom(): void {
-    this.trackService.getAllRamdom$()
-      .subscribe((response: TrackModel[]) => {
-        this.tracksRamdom = response
-      })
-  }
-
-  ngOnDestroy(): void {
-
-  }
+    }
 
 }

@@ -22,9 +22,19 @@ export class TracksPagesComponent implements OnInit, OnDestroy {
 
 
     ngOnInit(): void {
-        this.trackService.getAllTracks$()
-            .subscribe(response => {
-                console.log('Respuesta Aquí Desde la API ')
+        this.loadDataAll()
+        this.loadDataRamdom()
+    }
+
+    async loadDataAll(): Promise<any> {
+        this.tracksTrending = await this.trackService.getAllTracks$().toPromise()
+    }
+
+    loadDataRamdom(): void {
+        this.trackService.getAllRamdom$()
+            .subscribe((response: TrackModel[]) => {
+                // console.log('Respuesta Aquí Desde la API ', response)
+                this.tracksRamdom = response
             })
     }
 

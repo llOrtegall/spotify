@@ -27,12 +27,6 @@ export class TracksPagesComponent implements OnInit, OnDestroy {
   async loadDataAll(): Promise<any> {
     this.tracksTrending = await this.trackService.getAllTracks$().toPromise()
     this.tracksRamdom = await this.trackService.getAllRamdom$().toPromise()
-    // .then(res => {})
-    // .catch(err => {
-    //   console.log('Error de Conexción')
-    // })
-
-    // console.log('-promesa cruda--->', dataRaw)
   }
 
   loadDataRamdom(): void {

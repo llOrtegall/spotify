@@ -16,9 +16,7 @@ export class InjectSessionInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 
         try {
-
             const token = this.cookieService.get('token')
-
             let newRequest = request
             newRequest = request.clone({
                 setHeaders: {
@@ -26,12 +24,9 @@ export class InjectSessionInterceptor implements HttpInterceptor {
                 }
             })
             return next.handle(newRequest);
-
         } catch (error) {
-
             console.log('Error Ojito', error)
             return next.handle(request);
-
         }
     }
 }

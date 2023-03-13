@@ -18,9 +18,9 @@ import { InjectSessionInterceptor } from '@core/interceptors/inject-session.inte
   ],
   providers: [CookieService,
     {
-      provide:HTTP_INTERCEPTORS,
+      provide: HTTP_INTERCEPTORS,
       useClass: InjectSessionInterceptor,
-      multi:true
+      multi: true
     }
   ],
   bootstrap: [AppComponent]
